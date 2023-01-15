@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.539
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hive-auth-dotnet", "hive-auth-dotnet\hive-auth-dotnet.csproj", "{C47EDD8E-230C-42C8-B7C8-6733753FE971}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C47EDD8E-230C-42C8-B7C8-6733753FE971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C47EDD8E-230C-42C8-B7C8-6733753FE971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C47EDD8E-230C-42C8-B7C8-6733753FE971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C47EDD8E-230C-42C8-B7C8-6733753FE971}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48BBF918-8912-463C-BA26-2FB2FE4333BF}
+	EndGlobalSection
+EndGlobal
