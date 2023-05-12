@@ -55,9 +55,9 @@ namespace hive_auth_dotnet
 						// Try to decrypt and parse payload data
 						string decrypted = CryptoJS.Decrypt((string)JMsg["data"], m_auth_key);
 						JObject JData = JObject.Parse(decrypted);
-						string token = (string)JData["token"];
+						string token = (string)JData["token"]; // DEPRECATED since HAS protocol v1
 						ulong expire = (ulong)JData["expire"];
-						MessageBox.Show(string.Format("Authenticated with token: {0}", token),"Success");
+						MessageBox.Show(string.Format("Authenticated with success");
 					}
 					catch (Exception ex)
 					{
@@ -119,7 +119,6 @@ namespace hive_auth_dotnet
 								)
 							)
 						//,
-						//new JProperty("token", null),		// Initialize this property if you already have an HiveAuth token
 						//new JProperty("challenge", null)	// Initialize this proporty if you have a challenge
 						).ToString();
 
