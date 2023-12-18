@@ -49,25 +49,38 @@ namespace hive_auth_dotnet
 					}
 					break;
 				case "auth_ack":
+					// Hice QR code
+					picQRCode.Visible = false;
 					try
 					{
-						picQRCode.Visible = false;
 						// Try to decrypt and parse payload data
 						string decrypted = CryptoJS.Decrypt((string)JMsg["data"], m_auth_key);
 						JObject JData = JObject.Parse(decrypted);
 						string token = (string)JData["token"]; // DEPRECATED since HAS protocol v1
 						ulong expire = (ulong)JData["expire"];
-						MessageBox.Show(string.Format("Authenticated with success");
+						MessageBox.Show(string.Format("Authenticated with success"));
+						btnSign.Enabled = true;
 					}
 					catch (Exception ex)
 					{
-						picQRCode.Visible = false;
 						// Decryption failed - ignore message
 						Console.WriteLine("decryption failed", ex.Message);
 					}
 					break;
 				case "auth_nack":
 					MessageBox.Show("Authentication refused");
+					break;
+
+				case "sign_wait":
+					Console.WriteLine("Waiting for user approval");
+					Console.WriteLine(string.Format("uuid: {0}",JMsg["uuid"]));
+					break;
+				case "sign_ack":
+					string txid = (string)JMsg["data"];
+					MessageBox.Show(string.Format("transaction signed (txid: {0}))",txid));
+					break;
+				case "sign_nack":
+					MessageBox.Show("Transactions refused");
 					break;
 			}
 		}
@@ -119,7 +132,7 @@ namespace hive_auth_dotnet
 								)
 							)
 						//,
-						//new JProperty("challenge", null)	// Initialize this proporty if you have a challenge
+						//new JProperty("challenge", null)	// Initialize this property if you have a challenge
 						).ToString();
 
 					// Encrypt auth_req_data using our authentication key
@@ -146,9 +159,65 @@ namespace hive_auth_dotnet
 			}
 		}
 
-		private void btnBroadcast_Click(object sender, EventArgs e)
+		private async void btnSign_Click(object sender, EventArgs e)
 		{
+			using (ClientWebSocket ws = new ClientWebSocket())
+			{
+				try
+				{
+					await ws.ConnectAsync(new Uri(m_auth_host), CancellationToken.None);
+					JObject json = new JObject(
+						new JProperty("test", true)
+					);
+					JArray op1 = new JArray(
+						"custom_json",
+						new JObject(
+							new JProperty("required_auths", new JArray()),
+							new JProperty("required_posting_auths", new JArray(txtUsername.Text)),
+							new JProperty("id", "test"),
+							new JProperty("json", json.ToString())
+						)
+					);
+					JArray op2 = new JArray(
+						"custom_json",
+						new JObject(
+							new JProperty("required_auths", new JArray()),
+							new JProperty("required_posting_auths", new JArray(txtUsername.Text)),
+							new JProperty("id", "test"),
+							new JProperty("json", json.ToString())
+						)
+					);
+					JArray operations = new JArray(op1,op2);
 
+					// Create auth_req_data
+					string sign_req_data =
+						new JObject(
+							new JProperty("key_type", "posting"),
+							new JProperty("ops", operations),
+							new JProperty("broadcast", true),
+							new JProperty("nonce", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+						).ToString();
+
+					// Encrypt auth_req_data using our authentication key
+					sign_req_data = CryptoJS.Encrypt(sign_req_data, m_auth_key).ToString();
+
+					// Prepare HAS payload
+					string payload =
+						new JObject(
+							new JProperty("cmd", "sign_req"),
+							new JProperty("account", txtUsername.Text),
+							new JProperty("data", sign_req_data)
+							//,new JProperty("token", m_auth_key)	// Obsolete
+						).ToString();
+
+					await Send(ws, payload);
+					await Receive(ws);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"ERROR - {ex.Message}");
+				}
+			}
 		}
 	}
 }

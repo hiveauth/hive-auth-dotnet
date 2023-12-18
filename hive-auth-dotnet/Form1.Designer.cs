@@ -33,6 +33,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnLogin = new System.Windows.Forms.Button();
 			this.picQRCode = new System.Windows.Forms.PictureBox();
+			this.btnSign = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.picQRCode)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -64,7 +65,7 @@
 			// 
 			// picQRCode
 			// 
-			this.picQRCode.Location = new System.Drawing.Point(12, 57);
+			this.picQRCode.Location = new System.Drawing.Point(12, 85);
 			this.picQRCode.Name = "picQRCode";
 			this.picQRCode.Size = new System.Drawing.Size(250, 250);
 			this.picQRCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -72,12 +73,24 @@
 			this.picQRCode.TabStop = false;
 			this.picQRCode.Visible = false;
 			// 
+			// btnSign
+			// 
+			this.btnSign.Enabled = false;
+			this.btnSign.Location = new System.Drawing.Point(138, 56);
+			this.btnSign.Name = "btnSign";
+			this.btnSign.Size = new System.Drawing.Size(122, 23);
+			this.btnSign.TabIndex = 2;
+			this.btnSign.Text = "Sign Transaction";
+			this.btnSign.UseVisualStyleBackColor = true;
+			this.btnSign.Click += new System.EventHandler(this.btnSign_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(272, 317);
+			this.ClientSize = new System.Drawing.Size(272, 340);
 			this.Controls.Add(this.picQRCode);
+			this.Controls.Add(this.btnSign);
 			this.Controls.Add(this.btnLogin);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.txtUsername);
@@ -96,6 +109,7 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button btnLogin;
 		private System.Windows.Forms.PictureBox picQRCode;
+		private System.Windows.Forms.Button btnSign;
 	}
 }
 
